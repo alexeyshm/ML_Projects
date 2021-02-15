@@ -18,11 +18,16 @@ class RandomTimeSeries:
     '''
     def __init__(self, n, cardinality = None):
         self.n = n
-        self.values = np.random.randn(n) * np.random.randint(1, 20) + np.random.randint(-20, 20)
+        self.t = np.arange(n) + 1
+        noise = np.random.randn(n) * np.random.randint(1, 20) + np.random.randint(-10, 10)
+        trend = self.t * np.random.uniform(-0.05, 0.05)
+        seasonality = np.sin(self.t) * np.random.randint(1, 20)
+
+        self.values = noise + trend + seasonality
         self.mean = np.mean(self.values)
         self.std = np.std(self.values)
         self.norm_values = (self.values - self.mean) / self.std
-        self.data = {'t': range(self.n), 'x': self.values}
+        self.data = {'t': self.t, 'x': self.values}
         if cardinality:
             self.sax(cardinality)
 
